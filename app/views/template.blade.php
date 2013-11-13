@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title></title>
+    {{HTML::style('css/custom.css')}}
 </head>
 
 <body>

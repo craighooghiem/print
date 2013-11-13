@@ -1,5 +1,7 @@
 @extends('template')
 
 @section('content')
-	<p>This is some content for the index.</p>
+	@foreach($items as $i)
+		<p><a href="{{URL::to('product/'.$i->id)}}">{{$i->name}}</a></p>
+	@endforeach
 @stop
