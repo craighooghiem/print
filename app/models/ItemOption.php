@@ -4,7 +4,7 @@ class ItemOption extends Eloquent{
 
 	protected $table = 'item_options';
 
-	protected $fillable = array('item_id', 'name');
+	protected $fillable = array('item_id', 'name', 'input_type');
 
 	public function item()
 	{

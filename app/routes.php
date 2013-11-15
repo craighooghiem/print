@@ -13,3 +13,4 @@
 
 Route::get('/', 'HomeController@index');
 Route::get('/product/{product_id}', 'HomeController@product');
+Route::any('/product/{product_id}/post', 'HomeController@post_product');
