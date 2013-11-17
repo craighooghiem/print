@@ -1,17 +1,11 @@
 <?php
-/*
-Uploadify
-Copyright (c) 2012 Reactive Apps, Ronnie Garcia
-Released under the MIT License <http://www.opensource.org/licenses/mit-license.php> 
-*/
 
 // Define a destination
-$targetFolder = '/print/public/uploads/user_submitted'; // Relative to the root
-$targetPath = $_SERVER['DOCUMENT_ROOT'] . $targetFolder;
+$targetFolder = __DIR__.'/uploads/user_submitted'; // Relative to the root
 
 if (!empty($_FILES)) {
 	$tempFile = $_FILES['Filedata']['tmp_name'];
-	$targetPath = $_SERVER['DOCUMENT_ROOT'] . $targetFolder;
+	$targetPath = $targetFolder;
 	$targetFile = rtrim($targetPath,'/') . '/' . $_POST['time'].'_'.$_FILES['Filedata']['name'];
 
 	// Validate the file type
@@ -19,8 +13,8 @@ if (!empty($_FILES)) {
 	$fileParts = pathinfo($_FILES['Filedata']['name']);
 	
 	if (in_array($fileParts['extension'],$fileTypes)) {
-		move_uploaded_file($tempFile,$targetFile);
-		echo '1';
+		$success = move_uploaded_file($tempFile,$targetFile);
+		echo $tempFile.' -- '.$targetFile;
 	} else {
 		echo 'Invalid file type.';
 	}

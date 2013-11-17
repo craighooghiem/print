@@ -39,6 +39,8 @@
 		<!-- UPLOADIFY HERE -->
 		<input type="file" name="file_upload" id="file_upload" />
 
+		<div id="some_file_queue"></div>
+
 		<div id="photos"></div>
 
 		<h4 class="item_option">Please fill in all fields marked (*)</h4>
@@ -116,9 +118,10 @@
 		$(function() {
 			var time = new Date().getTime();
 		    $('#file_upload').uploadify({
+		    	'queueID'  : 'some_file_queue',
 		        'swf'      : '../uploadify.swf',
 		        'uploader' : '../uploadify.php',
-		        'formData' : { 'time' : time},
+		        'formData' : { 'time' : time },
 		        'onUploadComplete' : function(file) {
 		            $('#photos').append('<input type="hidden" name="photos[]" value="'+time+'_'+file.name+'">');
 		        }
