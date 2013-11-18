@@ -4,9 +4,11 @@
 
 	<h3>Personalize Yours:</h3>
 
-	@foreach($errors->all() as $error)
-        <p>{{$error}}</p>
-    @endforeach
+	<p class="errors">
+		@foreach($errors->all() as $error)
+	        {{$error}}<br />
+	    @endforeach
+	</p>
 
 	<form method="POST" enctype="multipart/form-data" action="{{URL::to('product/'.$product->id.'/post')}}">
 		@foreach($product->options as $o)
@@ -33,15 +35,29 @@
 
 		<p>
 			<h4 class="item_option">Quantity: </h4>
-			<input type="text" name="quantity">
+			<input type="text" name="quantity" value="{{ Input::old('quantity') }}">
 		</p>
 
 		<!-- UPLOADIFY HERE -->
 		<input type="file" name="file_upload" id="file_upload" />
 
-		<div id="some_file_queue"></div>
+		<div id="some_file_queue">
+			@if(Input::old('photos'))
+				@foreach(Input::old('photos') as $index => $photo)
+					<div class="uploadify-queue-item">
+						{{ $photo }}
+					</div>
+				@endforeach
+			@endif
+		</div>
 
-		<div id="photos"></div>
+		<div id="photos">
+			@if(Input::old('photos'))
+				@foreach(Input::old('photos') as $index => $photo)
+					<input type="hidden" value="{{ $photo }}" name="photos[]" />
+				@endforeach
+			@endif
+		</div>
 
 		<h4 class="item_option">Please fill in all fields marked (*)</h4>
 		<p>
@@ -54,59 +70,84 @@
 		</p>
 		<p>
 			<label>First Name * </label>
-			<input type="text" name="fname" placeholder="First Name">
+			<input type="text" name="fname" placeholder="First Name" value="{{ Input::old('fname') }}">
 		</p>
 		<p>
 			<label>Last Name * </label>
-			<input type="text" name="lname" placeholder="Last Name">
+			<input type="text" name="lname" placeholder="Last Name" value="{{ Input::old('lname') }}">
 		</p>
 		<p>
 			<label>Company Name </label>
-			<input type="text" name="company_name" placeholder="Company Name">
+			<input type="text" name="company_name" placeholder="Company Name" value="{{ Input::old('company_name') }}">
 		</p>
 		<p>
 			<label>Email * </label>
-			<input type="text" name="email" placeholder="Email Address">
+			<input type="text" name="email" placeholder="Email Address" value="{{ Input::old('email') }}">
 		</p>
 		<p>
 			<label>Confirm Email * </label>
-			<input type="text" name="confirm_email" placeholder="Email Address">
+			<input type="text" name="confirm_email" placeholder="Email Address" value="{{ Input::old('confirm_email') }}">
 		</p>
 		<p>
 			<label>Street / No. * </label>
-			<input type="text" name="street_no" placeholder="Street / No.">
+			<input type="text" name="street_no" placeholder="Street / No." value="{{ Input::old('street_no') }}">
 		</p>
 		<p>
 			<label>Address Line 2 </label>
-			<input type="text" name="address" placeholder="Address">
+			<input type="text" name="address" placeholder="Address" value="{{ Input::old('address') }}">
 		</p>
 		<p>
 			<label>Postal / Zip Code * </label>
-			<input type="text" name="postal" placeholder="Postal / Zip Code">
+			<input type="text" name="postal" placeholder="Postal / Zip Code" value="{{ Input::old('postal') }}">
 		</p>
 		<p>
 			<label>Town / City * </label>
-			<input type="text" name="city" placeholder="Town / City ">
+			<input type="text" name="city" placeholder="Town / City " value="{{ Input::old('city') }}">
 		</p>
 		<p>
 			<label>Province / State * </label>
 			<select name="province">
 				@foreach($state_arr as $key => $value)
-					<option value="{{$key}}">{{$value}}</option>
+					@if(Input::old('province') && Input::old('province') == $key)
+						<option selected="selected" value="{{$key}}">{{$value}}</option>
+					@else
+						<option value="{{$key}}">{{$value}}</option>
+					@endif
 				@endforeach
 			</select>
 		</p>
 		<p>
 			<label>Telephone * </label>
-			<input type="text" name="telephone1" placeholder="000">
-			<input type="text" name="telephone2" placeholder="000">
-			<input type="text" name="telephone3" placeholder="0000">
+			<input type="text" name="telephone1" value="{{ Input::old('telephone1') }}" placeholder="000">
+			<input type="text" name="telephone2" value="{{ Input::old('telephone2') }}" placeholder="000">
+			<input type="text" name="telephone3" value="{{ Input::old('telephone3') }}" placeholder="0000">
 		</p>
 
 		<h4 class="item_option">Pickup / Delivery</h4>
-		<p><input type="radio" value="I will pickup my order when it is ready (pickup at 800 Talbot Street, St. Thomas, ON)" name="pickup_delivery"> I will pickup my order when it is ready (pickup at 800 Talbot Street, St. Thomas, ON)</input></p>
-		<p><input type="radio" value="Ship to address above (extra charges may apply)" name="pickup_delivery"> Ship to address above (extra charges may apply)</input></p>
-		<p><input type="radio" value="Enter a separate shipping address (extra charges may apply)" name="pickup_delivery"> Enter a separate shipping address (extra charges may apply)</input></p>
+		<p>
+			@if(Input::old('pickup_delivery') && Input::old('pickup_delivery') == 'I will pickup my order when it is ready (pickup at 800 Talbot Street, St. Thomas, ON)')
+				<input type="radio" checked="checked" value="I will pickup my order when it is ready (pickup at 800 Talbot Street, St. Thomas, ON)" name="pickup_delivery" /> 
+			@else
+				<input type="radio" value="I will pickup my order when it is ready (pickup at 800 Talbot Street, St. Thomas, ON)" name="pickup_delivery" /> 
+			@endif
+			I will pickup my order when it is ready (pickup at 800 Talbot Street, St. Thomas, ON)
+		</p>
+		<p>
+			@if(Input::old('pickup_delivery') && Input::old('pickup_delivery') == 'Ship to address above (extra charges may apply)')
+				<input type="radio" checked="checked" value="Ship to address above (extra charges may apply)" name="pickup_delivery">
+			@else
+				<input type="radio" value="Ship to address above (extra charges may apply)" name="pickup_delivery">
+			@endif
+			Ship to address above (extra charges may apply)
+		</p>
+		<p>
+			@if(Input::old('pickup_delivery') && Input::old('pickup_delivery') == 'Enter a separate shipping address (extra charges may apply)')
+				<input type="radio" checked="checked" value="Enter a separate shipping address (extra charges may apply)" name="pickup_delivery">
+			@else
+				<input type="radio" value="Enter a separate shipping address (extra charges may apply)" name="pickup_delivery">
+			@endif
+			Enter a separate shipping address (extra charges may apply)
+		</p>
 
 		<input type="hidden" name="product_name" value="{{$product->name}}">
 

@@ -18,7 +18,7 @@ class HomeController extends BaseController
 			"AB" => "Alberta",
 			"BC" => "British Columbia",
 			"MB" => "Manitoba",
-			"NB" => "New Burnswick",
+			"NB" => "New Brunswick",
 			"NL" => "Newfoundland and Labrador",
 			"NS" => "Nova Scotia",
 			"NT" => "Northwest Territories",
@@ -85,34 +85,37 @@ class HomeController extends BaseController
 
 	public function post_product($product_id)
 	{
+		Input::flash();
 		$validator = Validator::make(
-		    array(	'quantity' => Input::get('quantity') ,
-		    		'salutation' => Input::get('salutation') ,
-		    		'first_name' => Input::get('fname') ,
-		    		'last_name' => Input::get('lname') ,
-		    		'company_name' => Input::get('company_name') ,
-		    		'email' => Input::get('email'), 
-		    		'confirm_email' => Input::get('confirm_email'), 
-		    		'street no' => Input::get('street_no'),
-		    		'postal' => Input::get('postal'), 
-		    		'city' => Input::get('city'), 
-		    		'telephone' => Input::get('telephone1'), 
-		    		'telephone' => Input::get('telephone2'), 
-		    		'telephone' => Input::get('telephone3')
+		    array(	
+		    	'quantity' => Input::get('quantity'),
+	    		'salutation' => Input::get('salutation'),
+	    		'first_name' => Input::get('fname'),
+	    		'last_name' => Input::get('lname'),
+	    		'company_name' => Input::get('company_name'),
+	    		'email' => Input::get('email'), 
+	    		'confirm_email' => Input::get('confirm_email'), 
+	    		'street no' => Input::get('street_no'),
+	    		'postal' => Input::get('postal'), 
+	    		'city' => Input::get('city'), 
+	    		'telephone' => Input::get('telephone1'), 
+	    		'telephone' => Input::get('telephone2'), 
+	    		'telephone' => Input::get('telephone3')
 		    	),
-		    array(	'quantity' => array('required') ,
-		    		'salutation' => array('required') ,
-		    		'first_name' => array('required') ,
-		    		'last_name' => array('required') ,
-		    		'company_name' => array('required') ,
-		    		'email' => array('required', 'email', 'same:confirm_email'), 
-		    		'confirm_email' => array('required', 'email', ), 
-		    		'street no' => array('required'),
-		    		'postal' => array('required'), 
-		    		'city' => array('required'), 
-		    		'telephone' => array('required'), 
-		    		'telephone' => array('required'), 
-		    		'telephone' => array('required')
+		    array(	
+		    	'quantity' => array('required'),
+	    		'salutation' => array('required'),
+	    		'first_name' => array('required'),
+	    		'last_name' => array('required'),
+	    		'company_name' => array('required'),
+	    		'email' => array('required', 'email', 'same:confirm_email'), 
+	    		'confirm_email' => array('required', 'email', ), 
+	    		'street no' => array('required'),
+	    		'postal' => array('required'), 
+	    		'city' => array('required'), 
+	    		'telephone' => array('required'), 
+	    		'telephone' => array('required'), 
+	    		'telephone' => array('required')
 		    	)
 		);
 
@@ -122,16 +125,16 @@ class HomeController extends BaseController
         }
 
         $user = User::create(array('salutation' => Input::get('salutation'), 
-        					'fname' => Input::get('fname'), 
-        					'lname' => Input::get('lname' ), 
-        					'company_name' => Input::get('company_name'), 
-        					'email' => Input::get('email'), 
-        					'street_no' => Input::get('street_no'), 
-        					'address' => Input::get('address'), 
-        					'postal' => Input::get('postal'), 
-        					'city' => Input::get('city'), 
-        					'province' => Input::get('province'), 
-        					'telephone' => Input::get('telephone1').'-'.Input::get('telephone2').'-'.Input::get('telephone3')
+			'fname' => Input::get('fname'), 
+			'lname' => Input::get('lname' ), 
+			'company_name' => Input::get('company_name'), 
+			'email' => Input::get('email'), 
+			'street_no' => Input::get('street_no'), 
+			'address' => Input::get('address'), 
+			'postal' => Input::get('postal'), 
+			'city' => Input::get('city'), 
+			'province' => Input::get('province'), 
+			'telephone' => Input::get('telephone1').'-'.Input::get('telephone2').'-'.Input::get('telephone3')
         ));
 
         if($user->save() )
@@ -139,10 +142,10 @@ class HomeController extends BaseController
         	$details = Input::get('details') != '' ? json_encode(Input::get('details') ) : '-';
 
         	$order = Order::create(array('user_id' => $user->id, 
-        							'item_id' => $product_id,
-        							'pickup_delivery' => Input::get('pickup_delivery'), 
-        							'quantity' => Input::get('quantity'), 
-        							'details' => $details
+				'item_id' => $product_id,
+				'pickup_delivery' => Input::get('pickup_delivery'), 
+				'quantity' => Input::get('quantity'), 
+				'details' => $details
         	));
 
         	if($order->save() )
@@ -151,37 +154,40 @@ class HomeController extends BaseController
         		{
         			foreach(Input::get('photos') as $p)
 	        		{
-		        		$photo = Photo::create(array('order_id' => $order->id, 
-		        								'original_name' => substr($p, 14), 
-		        								'photo_name' => $p
-						));
+		        		$photo = Photo::create(
+		        			array(
+		        				'order_id' => $order->id, 
+								'original_name' => substr($p, 14), 
+								'photo_name' => $p
+							)
+		        		);
 	        		}
 	        	}
 
 	        	$photos = Input::get('photos') != null ? Input::get('photos') : 'n/a';
 	        	$data = array(
-	        			'product' => Input::get('product_name'),
-        		        'fname' => Input::get('fname'), 
-    					'lname' => Input::get('lname' ), 
-    					'company_name' => Input::get('company_name'), 
-    					'email' => Input::get('email'), 
-    					'street_no' => Input::get('street_no'), 
-    					'address' => Input::get('address'), 
-    					'postal' => Input::get('postal'), 
-    					'city' => Input::get('city'), 
-    					'province' => Input::get('province'), 
-    					'telephone' => Input::get('telephone1').'-'.Input::get('telephone2').'-'.Input::get('telephone3'),
-    					'quantity' => Input::get('quantity'),
-    					'pickup_delivery' => Input::get('pickup_delivery'),
-    					'details' => $details,
-    					'photos' => $photos
-	        		);
+        			'product' => Input::get('product_name'),
+    		        'fname' => Input::get('fname'), 
+					'lname' => Input::get('lname' ), 
+					'company_name' => Input::get('company_name'), 
+					'email' => Input::get('email'), 
+					'street_no' => Input::get('street_no'), 
+					'address' => Input::get('address'), 
+					'postal' => Input::get('postal'), 
+					'city' => Input::get('city'), 
+					'province' => Input::get('province'), 
+					'telephone' => Input::get('telephone1').'-'.Input::get('telephone2').'-'.Input::get('telephone3'),
+					'quantity' => Input::get('quantity'),
+					'pickup_delivery' => Input::get('pickup_delivery'),
+					'details' => $details,
+					'photos' => $photos
+        		);
 	        	$this->layout->content = View::make('mail', $data);
 	        	//send the email here
 	        	Mail::send('mail', $data, function($message)
 				{
-				    $message->to('info@tomeastwood.ca', 'Print Plus')->subject('Online Order Placed');
-				    $message->from('tom.eastwood88@gmail.com', 'Print Plus Order Email');
+				    $message->to('craig.hooghiem@gmail.com', 'Print Plus')->subject('Online Order Placed');
+				    $message->from('orders@print-plus.ca', 'Print Plus Orders');
 				});
         	}
         }

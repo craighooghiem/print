@@ -11,7 +11,6 @@
 
 <body>
     <div style="width: 620px;">
-        <h1>Print Project</h1>
 
         @yield('content')
 
