@@ -119,6 +119,7 @@
 			var time = new Date().getTime();
 		    $('#file_upload').uploadify({
 		    	'queueID'  : 'some_file_queue',
+		    	'removeCompleted'	: true,
 		        'swf'      : '{{ URL::asset('uploadify.swf') }}',
 		        'uploader' : '{{ URL::asset('uploadify.php') }}',
 		        'formData' : { 'time' : time },
