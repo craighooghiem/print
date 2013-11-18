@@ -119,8 +119,8 @@
 			var time = new Date().getTime();
 		    $('#file_upload').uploadify({
 		    	'queueID'  : 'some_file_queue',
-		        'swf'      : '../uploadify.swf',
-		        'uploader' : '../uploadify.php',
+		        'swf'      : '{{ URI::asset('uploadify.swf') }}',
+		        'uploader' : '{{ URI::asset('uploadify.php') }}',
 		        'formData' : { 'time' : time },
 		        'onUploadComplete' : function(file) {
 		            $('#photos').append('<input type="hidden" name="photos[]" value="'+time+'_'+file.name+'">');
