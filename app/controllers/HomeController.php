@@ -141,11 +141,27 @@ class HomeController extends BaseController
         {
         	$details = Input::get('details') != '' ? json_encode(Input::get('details') ) : '-';
 
+        	$street_no = Input::get('pickup_delivery') == 'Enter a separate shipping address (extra charges may apply)' ? Input::get('street_no2') : Input::get('street_no');
+        	$address = Input::get('pickup_delivery') == 'Enter a separate shipping address (extra charges may apply)' ? Input::get('address2') : Input::get('address');
+        	$postal = Input::get('pickup_delivery') == 'Enter a separate shipping address (extra charges may apply)' ? Input::get('postal2') : Input::get('postal');
+        	$city = Input::get('pickup_delivery') == 'Enter a separate shipping address (extra charges may apply)' ? Input::get('city2') : Input::get('city');
+        	$province = Input::get('pickup_delivery') == 'Enter a separate shipping address (extra charges may apply)' ? Input::get('province2') : Input::get('province');
+
+        	//creating the shipping address
+        	$s_address = ShippingAddress::create(array(
+        		'street_no' => $street_no,
+        		'address' => $address,
+        		'postal' => $postal,
+        		'city' => $city,
+        		'province' => $province
+        	));
+
         	$order = Order::create(array('user_id' => $user->id, 
 				'item_id' => $product_id,
 				'pickup_delivery' => Input::get('pickup_delivery'), 
 				'quantity' => Input::get('quantity'), 
-				'details' => $details
+				'details' => $details,
+				'shipping_address_id' => $s_address->id
         	));
 
         	if($order->save() )
@@ -165,6 +181,7 @@ class HomeController extends BaseController
 	        	}
 
 	        	$photos = Input::get('photos') != null ? Input::get('photos') : 'n/a';
+	        	
 	        	$data = array(
         			'product' => Input::get('product_name'),
     		        'fname' => Input::get('fname'), 
@@ -180,9 +197,13 @@ class HomeController extends BaseController
 					'quantity' => Input::get('quantity'),
 					'pickup_delivery' => Input::get('pickup_delivery'),
 					'details' => $details,
-					'photos' => $photos
+					'photos' => $photos,
+					'shipping_street_no' => $street_no, 
+					'shipping_address' => $address, 
+					'shipping_postal' => $postal, 
+					'shipping_city' => $city, 
+					'shipping_province' => $province, 
         		);
-	        	$this->layout->content = View::make('mail', $data);
 	        	//send the email here
 	        	Mail::send('mail', $data, function($message)
 				{
@@ -192,7 +213,12 @@ class HomeController extends BaseController
         	}
         }
 
-		return Redirect::to('/');
+		return Redirect::to('/success');
+	}
+
+	public function success()
+	{
+		$this->layout->content = View::make('success');
 	}
 
 }

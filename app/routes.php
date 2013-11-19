@@ -17,3 +17,4 @@ Route::get('/', function(){
 Route::get('/index.php', 'HomeController@index');
 Route::get('/product/{product_id}', 'HomeController@product');
 Route::any('/product/{product_id}/post', 'HomeController@post_product');
+Route::get('/success', 'HomeController@success');

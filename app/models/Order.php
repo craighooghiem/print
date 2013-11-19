@@ -4,7 +4,7 @@ class Order extends Eloquent{
 
 	protected $table = 'orders';
 
-	protected $fillable = array('user_id', 'item_id', 'pickup_delivery', 'quantity', 'details');
+	protected $fillable = array('user_id', 'item_id', 'pickup_delivery', 'quantity', 'details', 'shipping_address_id');
 
 	public function user()
 	{
@@ -19,6 +19,11 @@ class Order extends Eloquent{
 	public function photos()
 	{
 		return $this->hasMany('Photo');
+	}
+
+	public function shipping_address()
+	{
+		return $this->hasOne('ShippingAddress');
 	}
 
 }
