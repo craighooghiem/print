@@ -2,7 +2,7 @@
 
 <?php $details = json_decode($details, true) ?>
 @if(is_array($details))
-	<p>Order Details:</p>
+	<h3>Order Details:</h3>
 	@foreach($details as $key => $value)
 		{{str_replace('_', ' ', $key).' : '.$value}}
 	@endforeach
@@ -12,7 +12,7 @@
 
 <br />
 
-<p>User information:</p>
+<h3>User information:</h3>
 
 <p>Name: {{$fname.' '.$lname}}</p>
 <p>Company: {{$company_name}}</p>
@@ -23,6 +23,13 @@
 <p>City: {{$city}}</p>
 <p>Province: {{$province}}</p>
 <p>Telephone: {{$telephone}}</p>
+
+<h3>Shipping Address</h3>
+<p>Address: {{$shipping_street_no}}</p>
+<p>Second Address: {{$shipping_address}}</p>
+<p>Postal Code / ZIP: {{$shipping_postal}}</p>
+<p>City: {{$shipping_city}}</p>
+<p>Province: {{$shipping_province}}</p>
 
 <br />
 
